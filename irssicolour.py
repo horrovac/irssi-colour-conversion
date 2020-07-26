@@ -18,7 +18,6 @@ def main():
 		exit(1)
 
 	print ( cvrt(num) )
-	print ( 'hoho' )
 
 def cvrt(num):
 	if ( num < 17 ):
