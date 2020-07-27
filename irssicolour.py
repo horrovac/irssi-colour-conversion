@@ -52,7 +52,7 @@ def print_palette():
 	fg = 15
 	linechar = ""
 	for col16 in range ( 0, 16 ):
-		linechar += " \x1B[38;5;{:d}m\x1B[48;5;{:d}m{:3s}\x1B[48;5;0m".format(fg, col16, cvrt(col16)) 
+		linechar += "\x1B[38;5;{:d}m\x1B[48;5;{:d}m{:^4s}\x1B[48;5;0m".format(fg, col16, cvrt(col16)) 
 		fg = 0
 	
 	print ( linechar + "\n" )	
@@ -67,7 +67,7 @@ def print_palette():
 			for block in range ( 0, 18, 6 ):
 				blockstart = block * 6 + line
 				for num in range ( blockstart, blockstart+6 ):
-					linechar += " \x1B[38;5;{:d}m\x1B[48;5;{:d}m{:3s}\x1B[48;5;0m".format(fg, num, cvrt(num)) 
+					linechar += "\x1B[38;5;{:d}m\x1B[48;5;{:d}m{:^4s}\x1B[48;5;0m".format(fg, num, cvrt(num)) 
 		
 				linechar += "  "
 			
@@ -78,7 +78,7 @@ def print_palette():
 	fg = 15
 	linechar = ""
 	for greyscale in range ( 232, 256 ):
-		linechar += " \x1B[38;5;{:d}m\x1B[48;5;{:d}m{:3s}\x1B[48;5;0m".format(fg, greyscale, cvrt(greyscale)) 
+		linechar += "\x1B[38;5;{:d}m\x1B[48;5;{:d}m{:^4s}\x1B[48;5;0m".format(fg, greyscale, cvrt(greyscale)) 
 		if ( greyscale == 243 ):
 			linechar += "\n"
 			fg = 0
