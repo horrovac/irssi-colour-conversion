@@ -14,6 +14,8 @@ func main() {
 	palette256 := flag.Bool("n", false, "Print colourN palette")
 	flag.Parse()
 
+	// If there's a non-option argument, treat it as a 256 colour number to 
+	// be converted. Otherwise print a palette
 	if flag.NArg() > 0 {
 		num, _ := strconv.Atoi(flag.Args()[0])
 		if -1 < num && num < 256 {
@@ -32,55 +34,65 @@ func main() {
 	}
 }
 
+// print out a colour palette
 func palette() {
+	line := ""
 	fg := 15
 	for col := 0; col < 17; col++ {
-		fmt.Print(printField(fg, col))
+		line += printField(fg, col)
 		fg = 0
 	}
-	fmt.Println("\x1B[93;65m\n")
+	fmt.Println(line, "\x1B[93;65m\n")
 
 	for _, hblock := range []int{16, 124} {
-		for line := hblock; line < hblock+6*6; line += 6 {
-			linechar := ""
-			switch line {
+		for linestart := hblock; linestart < hblock+6*6; linestart += 6 {
+			line := ""
+			switch linestart {
 			case 16, 124:
 				fg = 15
 			case 34, 142:
 				fg = 0
 			}
 			for block := 0; block < 18; block += 6 {
-				blockstart := block*6 + line
+				blockstart := block*6 + linestart
 				for num := blockstart; num < blockstart+6; num++ {
-					linechar += printField(fg, num)
+					line += printField(fg, num)
 				}
-				linechar += "  "
+				line += "  "
 			}
-			fmt.Println(linechar)
+			fmt.Println(line)
 		}
 		fmt.Println()
 	}
 	fg = 15
-	linechar := ""
+	line = ""
 	for greyscale := 232; greyscale < 256; greyscale++ {
-		linechar += printField(fg, greyscale)
+		line += printField(fg, greyscale)
+		line += "  "
 		if greyscale == 243 {
-			linechar += "\n"
+			line += "\n"
 			fg = 0
 		}
 	}
-	fmt.Print(linechar, "\n")
+	fmt.Print(line, "\n")
 }
 
+// print a palette field with the escape sequences for fg and bg colour
 func printField(fg int, num int) string {
 	return fmt.Sprintf("\x1B[38;5;%dm\x1B[48;5;%dm %s\x1B[48;5;0m", fg, num, conv(num))
 
 }
 
+// do nothing much, just convert the argument to a string. To be used via a 
+// pointer set depending on whether irssi or colourN syntax is required for 
+// the palette printout
 func pass(num int) string {
 	return fmt.Sprintf("%3d", num)
 }
 
+// return a irssi syntax colour code for the colourN argument. To be used via a 
+// pointer set depending on whether irssi or colourN syntax is required for 
+// the palette printout
 func convert(num int) string {
 	if num < 17 {
 		return fmt.Sprintf("%02X ", num)
