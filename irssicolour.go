@@ -10,6 +10,7 @@ type ConvFunc func(int) string
 var conv ConvFunc
 
 func main() {
+	flag.Usage = usage
 	irssi := flag.Bool("i", true, "Print irssi %xNN palette")
 	palette256 := flag.Bool("n", false, "Print colourN palette")
 	flag.Parse()
@@ -121,4 +122,10 @@ func convert(num int) string {
 		ones = string(num + 65)
 	}
 	return fmt.Sprintf("%d%s ", tens/10, ones)
+}
+
+func usage() {
+	fmt.Printf ( "Usage: %s [0-255] | %s [-i|-n]\nPositional argument gets converted to irssi colour notation ([0-7][0-9A-Z])\n", os.Args[0], os.Args[0])
+	flag.PrintDefaults()
+	os.Exit(0)
 }
