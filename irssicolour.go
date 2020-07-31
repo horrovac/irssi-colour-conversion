@@ -43,9 +43,10 @@ func palette() {
 	for _, hblock := range []int{16, 124} {
 		for line := hblock; line < hblock+6*6; line += 6 {
 			linechar := ""
-			if line == 16 || line == 124 {
+			switch line {
+			case 16, 124:
 				fg = 15
-			} else if line == 34 || line == 142 {
+			case 34, 142:
 				fg = 0
 			}
 			for block := 0; block < 18; block += 6 {
